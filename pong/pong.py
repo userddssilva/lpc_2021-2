@@ -1,11 +1,17 @@
 import turtle
 import os
 
+screen_width = 800
+screen_height = 600
+stretch_wid = 5
+stretch_len = 1
+
+
 # draw screen
 screen = turtle.Screen()
 screen.title("My Pong")
 screen.bgcolor("black")
-screen.setup(width=800, height=600)
+screen.setup(screen_width, screen_height)
 screen.tracer(0)
 
 # draw paddle 1
@@ -13,7 +19,7 @@ paddle_1 = turtle.Turtle()
 paddle_1.speed(0)
 paddle_1.shape("square")
 paddle_1.color("white")
-paddle_1.shapesize(stretch_wid=5, stretch_len=1)
+paddle_1.shapesize(stretch_wid, stretch_len)
 paddle_1.penup()
 paddle_1.goto(-350, 0)
 
@@ -22,7 +28,7 @@ paddle_2 = turtle.Turtle()
 paddle_2.speed(0)
 paddle_2.shape("square")
 paddle_2.color("white")
-paddle_2.shapesize(stretch_wid=5, stretch_len=1)
+paddle_2.shapesize(stretch_wid, stretch_len)
 paddle_2.penup()
 paddle_2.goto(350, 0)
 
@@ -60,15 +66,6 @@ def paddle_1_up():
     paddle_1.sety(y)
 
 
-def paddle_1_down():
-    y = paddle_1.ycor()
-    if y > -250:
-        y += -30
-    else:
-        y = -250
-    paddle_1.sety(y)
-
-
 def paddle_2_up():
     y = paddle_2.ycor()
     if y < 250:
@@ -76,6 +73,15 @@ def paddle_2_up():
     else:
         y = 250
     paddle_2.sety(y)
+
+
+def paddle_1_down():
+    y = paddle_1.ycor()
+    if y > -250:
+        y += -30
+    else:
+        y = -250
+    paddle_1.sety(y)
 
 
 def paddle_2_down():
