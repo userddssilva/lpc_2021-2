@@ -6,13 +6,16 @@ screen_height = 600
 stretch_wid = 5
 stretch_len = 1
 
-
-# draw screen
 screen = turtle.Screen()
-screen.title("My Pong")
-screen.bgcolor("black")
-screen.setup(screen_width, screen_height)
-screen.tracer(0)
+
+
+def window():
+    screen.title("My Pong")
+    screen.bgcolor("black")
+    screen.setup(screen_width, screen_height)
+    screen.tracer(0)
+    return screen
+
 
 # draw paddle 1
 paddle_1 = turtle.Turtle()
@@ -54,7 +57,6 @@ hud.color("white")
 hud.penup()
 hud.hideturtle()
 hud.goto(0, 260)
-hud.write("0 : 0", align="center", font=("Press Start 2P", 24, "normal"))
 
 
 def paddle_1_up():
@@ -94,14 +96,14 @@ def paddle_2_down():
 
 
 # keyboard
-screen.listen()
-screen.onkeypress(paddle_1_up, "w")
-screen.onkeypress(paddle_1_down, "s")
-screen.onkeypress(paddle_2_up, "Up")
-screen.onkeypress(paddle_2_down, "Down")
+window().listen()
+window().onkeypress(paddle_1_up, "w")
+window().onkeypress(paddle_1_down, "s")
+window().onkeypress(paddle_2_up, "Up")
+window().onkeypress(paddle_2_down, "Down")
 
 while True:
-    screen.update()
+    window().update()
 
     # ball movement
     ball.setx(ball.xcor() + ball.dx)
