@@ -7,12 +7,17 @@ from constants import *
 screen = turtle.Screen()
 
 
-def window():
+def set_window():
     screen.title("My Pong")
     screen.bgcolor("black")
     screen.setup(SCREEN_WIDTH, SCREEN_WEIGHT)
     screen.tracer(0)
-    return screen
+    # keyboard
+    screen.listen()
+    screen.onkeypress(paddle_1_up, "w")
+    screen.onkeypress(paddle_1_down, "s")
+    screen.onkeypress(paddle_2_up, "Up")
+    screen.onkeypress(paddle_2_down, "Down")
 
 
 # draw paddle 1
@@ -35,8 +40,9 @@ paddle_2.goto(350, 0)
 
 # draw ball
 ball = turtle.Turtle()
-ball.speed(10)
+ball.speed(0)
 ball.shape("square")
+ball.shapesize(2, 2)
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
@@ -93,15 +99,8 @@ def paddle_2_down():
     paddle_2.sety(y)
 
 
-# keyboard
-window().listen()
-window().onkeypress(paddle_1_up, "w")
-window().onkeypress(paddle_1_down, "s")
-window().onkeypress(paddle_2_up, "Up")
-window().onkeypress(paddle_2_down, "Down")
-
 while True:
-    window().update()
+    screen.update()
 
     # ball movement
     ball.setx(ball.xcor() + ball.dx)
