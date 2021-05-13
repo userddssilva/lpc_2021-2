@@ -148,13 +148,15 @@ def main():
             ball.dx *= -1
 
         # collision with the paddle 1
-        if ball.xcor() < -310 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50 and\
+        if ball.xcor() == paddle_1.xcor()+20 and \
+                paddle_1.ycor()+50 > ball.ycor() > paddle_1.ycor()-50 and \
                 not ball.xcor() < paddle_1.xcor():
             ball.dx *= -1
             os.system(PLAY_BOUNCE_SOUND)
 
         # collision with the paddle 2
-        if ball.xcor() > 310 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50 and\
+        if ball.xcor() == paddle_2.xcor()-20 and \
+                paddle_2.ycor()+50 > ball.ycor() > paddle_2.ycor()-50 and \
                 not ball.xcor() > paddle_2.xcor():
             ball.dx *= -1
             os.system(PLAY_BOUNCE_SOUND)
