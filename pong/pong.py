@@ -114,6 +114,8 @@ def game_ball():
 
 
 def main():
+    """ Main function of the game
+                    """
     score_1 = 0
     score_2 = 0
     window()
