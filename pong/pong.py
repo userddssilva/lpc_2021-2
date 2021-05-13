@@ -24,6 +24,8 @@ def game_hud():
 
 
 def window():
+    """ Create the game's window
+                """
     screen.title("My Pong")
     screen.bgcolor("black")
     screen.setup(800, 600)
@@ -31,6 +33,8 @@ def window():
 
 
 def controls():
+    """ Set the game's controls
+                """
     screen.listen()
     screen.onkeypress(paddle_1_up, "w")
     screen.onkeypress(paddle_1_down, "s")
@@ -50,6 +54,8 @@ def set_paddle(paddle, xcor, ycor):
 
 
 def move_up(paddle):
+    """ Move the paddles upwards
+            """
     y = paddle.ycor()
     if y < 250:
         y += 30
@@ -59,14 +65,20 @@ def move_up(paddle):
 
 
 def paddle_1_up():
+    """ Move the left paddle up
+            """
     move_up(paddle_1)
 
 
 def paddle_2_up():
+    """ Move the right paddle up
+                """
     move_up(paddle_2)
 
 
 def move_down(paddle):
+    """ Move the paddles downwards
+                """
     y = paddle.ycor()
     if y > -250:
         y += -30
@@ -76,10 +88,14 @@ def move_down(paddle):
 
 
 def paddle_1_down():
+    """ Move the left paddle down
+                """
     move_down(paddle_1)
 
 
 def paddle_2_down():
+    """ Move the left paddle down
+                """
     move_down(paddle_2)
 
 
