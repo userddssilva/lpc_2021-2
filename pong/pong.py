@@ -5,144 +5,163 @@ from constants import *
 
 
 screen = turtle.Screen()
+hud = turtle.Turtle()
+paddle_1 = turtle.Turtle()
+paddle_2 = turtle.Turtle()
+ball = turtle.Turtle()
 
 
-def window():
+def game_hud():
+    """ Game display"""
+    hud.speed(0)
+    hud.shape("square")
+    hud.color("white")
+    hud.penup()
+    hud.hideturtle()
+    hud.goto(0, 260)
+    hud.write("0:0", align="center", font=("Press Start 2P", 24, "normal"))
+
+
+def set_screen():
+    """Set config screen"""
     screen.title("My Pong")
     screen.bgcolor("black")
     screen.setup(SCREEN_WIDTH, SCREEN_WEIGHT)
-    screen.tracer(0)
-    return screen
+    screen.tracer()
 
 
-# draw paddle 1
-paddle_1 = turtle.Turtle()
-paddle_1.speed(0)
-paddle_1.shape("square")
-paddle_1.color("white")
-paddle_1.shapesize(stretch_wid, stretch_len)
-paddle_1.penup()
-paddle_1.goto(-350, 0)
+def listen_keyboard():
+    """This function listen the keys press used in game"""
+    screen.listen()
+    screen.onkeypress(paddle_1_up, "w")
+    screen.onkeypress(paddle_1_down, "s")
+    screen.onkeypress(paddle_2_up, "Up")
+    screen.onkeypress(paddle_2_down, "Down")
 
-# draw paddle 2
-paddle_2 = turtle.Turtle()
-paddle_2.speed(0)
-paddle_2.shape("square")
-paddle_2.color("white")
-paddle_2.shapesize(stretch_wid, stretch_len)
-paddle_2.penup()
-paddle_2.goto(350, 0)
 
-# draw ball
-ball = turtle.Turtle()
-ball.speed(10)
-ball.shape("square")
-ball.color("white")
-ball.penup()
-ball.goto(0, 0)
-ball.dx = 1
-ball.dy = 1
+def set_paddle(paddle, xcor, ycor):
+    """This function will be create a paddle to use on game"""
+    paddle.speed(0)
+    paddle.shape("square")
+    paddle.color("white")
+    paddle.shapesize(stretch_wid, stretch_len)
+    paddle.penup()
+    paddle.goto(xcor, ycor)
 
-# score
-score_1 = 0
-score_2 = 0
 
-# head-up display
-hud = turtle.Turtle()
-hud.speed(0)
-hud.shape("square")
-hud.color("white")
-hud.penup()
-hud.hideturtle()
-hud.goto(0, 260)
+def move_up(paddle):
+    """Move a paddle to up, setting y position of paddle"""
+    y = paddle.ycor()
+    if y < 250:
+        y += 30
+    else:
+        y = 250
+    paddle.sety(y)
+
+
+def move_down(paddle):
+    """Move a paddle to down, setting y position of paddle"""
+    y = paddle.ycor()
+    if y > -250:
+        y += -30
+    else:
+        y = -250
+    paddle.sety(y)
 
 
 def paddle_1_up():
-    y = paddle_1.ycor()
-    if y < 250:
-        y += 30
-    else:
-        y = 250
-    paddle_1.sety(y)
+    """Call move up to paddle 1"""
+    move_up(paddle_1)
 
 
 def paddle_2_up():
-    y = paddle_2.ycor()
-    if y < 250:
-        y += 30
-    else:
-        y = 250
-    paddle_2.sety(y)
+    """Call move up to paddle 2"""
+    move_up(paddle_2)
 
 
 def paddle_1_down():
-    y = paddle_1.ycor()
-    if y > -250:
-        y += -30
-    else:
-        y = -250
-    paddle_1.sety(y)
+    """Call move down to paddle 1"""
+    move_down(paddle_1)
 
 
 def paddle_2_down():
-    y = paddle_2.ycor()
-    if y > -250:
-        y += -30
-    else:
-        y = -250
-    paddle_2.sety(y)
+    """Call move down to paddle 2"""
+    move_down(paddle_2)
 
 
-# keyboard
-window().listen()
-window().onkeypress(paddle_1_up, "w")
-window().onkeypress(paddle_1_down, "s")
-window().onkeypress(paddle_2_up, "Up")
-window().onkeypress(paddle_2_down, "Down")
+def set_ball():
+    """Create ball will be create a rectangle ball to use on game"""
+    ball.speed(0)
+    ball.shape("square")
+    ball.color("white")
+    ball.penup()
+    ball.goto(0, 0)
+    ball.dx = 1
+    ball.dy = 1
 
-while True:
-    window().update()
 
-    # ball movement
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+def main():
+    score_1 = 0
+    score_2 = 0
+    set_screen()
+    listen_keyboard()
+    game_hud()
+    set_paddle(paddle_1, -350, 0)
+    set_paddle(paddle_2, 350, 0)
+    set_ball()
 
-    # collision with the upper wall
-    if ball.ycor() > 290:
-        os.system(PLAY_BOUNCE_SOUND)
-        ball.sety(290)
-        ball.dy *= -1
+    while True:
+        screen.update()
 
-    # collision with lower wall
-    if ball.ycor() < -290:
-        os.system(PLAY_BOUNCE_SOUND)
-        ball.sety(-290)
-        ball.dy *= -1
+        # ball movement
+        ball.setx(ball.xcor() + ball.dx)
+        ball.sety(ball.ycor() + ball.dy)
 
-    # collision with left wall
-    if ball.xcor() < -390:
-        score_2 += 1
-        hud.clear()
-        hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-        os.system(PLAY_BLEEP_SOUND)
-        ball.goto(0, 0)
-        ball.dx *= -1
+        # collision with the upper wall
+        if ball.ycor() > 290:
+            os.system(PLAY_BOUNCE_SOUND)
+            ball.sety(290)
+            ball.dy *= -1
 
-    # collision with right wall
-    if ball.xcor() > 390:
-        score_1 += 1
-        hud.clear()
-        hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-        os.system(PLAY_BLEEP_SOUND)
-        ball.goto(0, 0)
-        ball.dx *= -1
+        # collision with lower wall
+        if ball.ycor() < -290:
+            os.system(PLAY_BOUNCE_SOUND)
+            ball.sety(-290)
+            ball.dy *= -1
 
-    # collision with the paddle 1
-    if ball.xcor() < -330 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50:
-        ball.dx *= -1
-        os.system(PLAY_BOUNCE_SOUND)
+        # collision with left wall
+        if ball.xcor() < -390:
+            score_2 += 1
+            hud.clear()
+            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
+            os.system(PLAY_BLEEP_SOUND)
+            ball.goto(0, 0)
+            ball.dx *= -1
 
-    # collision with the paddle 2
-    if ball.xcor() > 330 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50:
-        ball.dx *= -1
-        os.system(PLAY_BOUNCE_SOUND)
+        # collision with right wall
+        if ball.xcor() > 390:
+            score_1 += 1
+            hud.clear()
+            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
+            os.system(PLAY_BLEEP_SOUND)
+            ball.goto(0, 0)
+            ball.dx *= -1
+
+        # collision with the paddle 1
+        if ball.xcor() < -310 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50 and\
+                not ball.xcor() < paddle_1.xcor():
+            ball.dx *= -1
+            os.system(PLAY_BOUNCE_SOUND)
+
+        # collision with the paddle 2
+        if ball.xcor() > 310 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50 and\
+                not ball.xcor() > paddle_2.xcor():
+            ball.dx *= -1
+            os.system(PLAY_BOUNCE_SOUND)
+
+
+if __name__ == '__main__':
+    main()
+
+
+
