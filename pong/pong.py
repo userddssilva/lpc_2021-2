@@ -1,10 +1,8 @@
 import turtle
 import os
 
-screen_width = 800
-screen_height = 600
-stretch_wid = 5
-stretch_len = 1
+from constants import *
+
 
 screen = turtle.Screen()
 
@@ -12,7 +10,7 @@ screen = turtle.Screen()
 def window():
     screen.title("My Pong")
     screen.bgcolor("black")
-    screen.setup(screen_width, screen_height)
+    screen.setup(SCREEN_WIDTH, SCREEN_WEIGHT)
     screen.tracer(0)
     return screen
 
@@ -37,7 +35,7 @@ paddle_2.goto(350, 0)
 
 # draw ball
 ball = turtle.Turtle()
-ball.speed(0)
+ball.speed(10)
 ball.shape("square")
 ball.color("white")
 ball.penup()
@@ -111,13 +109,13 @@ while True:
 
     # collision with the upper wall
     if ball.ycor() > 290:
-        os.system("afplay bounce.wav&")
+        os.system(PLAY_BOUNCE_SOUND)
         ball.sety(290)
         ball.dy *= -1
 
     # collision with lower wall
     if ball.ycor() < -290:
-        os.system("afplay bounce.wav&")
+        os.system(PLAY_BOUNCE_SOUND)
         ball.sety(-290)
         ball.dy *= -1
 
@@ -126,7 +124,7 @@ while True:
         score_2 += 1
         hud.clear()
         hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        os.system(PLAY_BLEEP_SOUND)
         ball.goto(0, 0)
         ball.dx *= -1
 
@@ -135,16 +133,16 @@ while True:
         score_1 += 1
         hud.clear()
         hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        os.system(PLAY_BLEEP_SOUND)
         ball.goto(0, 0)
         ball.dx *= -1
 
     # collision with the paddle 1
     if ball.xcor() < -330 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50:
         ball.dx *= -1
-        os.system("afplay bounce.wav&")
+        os.system(PLAY_BOUNCE_SOUND)
 
     # collision with the paddle 2
     if ball.xcor() > 330 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50:
         ball.dx *= -1
-        os.system("afplay bounce.wav&")
+        os.system(PLAY_BOUNCE_SOUND)
