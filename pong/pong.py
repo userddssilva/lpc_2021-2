@@ -19,7 +19,8 @@ def game_hud():
     hud.penup()
     hud.hideturtle()
     hud.goto(0, 260)
-    hud.write("0:0", align="center", font=("Press Start 2P", 24, "normal"))
+    hud.write("PLAYER > 0 :  PLAYER 2 >  0",
+              align="center", font=("Press Start 2P", 24, "normal"))
     return hud
 
 
@@ -113,64 +114,112 @@ def game_ball():
     return ball
 
 
+def update_score_2(score_1, score_2, player_1, player_2, ball):
+    score_2 += 1
+    hud.clear()
+    hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2,  score_2),
+              align="center", font=("Press Start 2P", 24, "normal"))
+    os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+    ball.goto(0, 0)
+    ball.dx *= -1
+    return score_2
+
+
+def update_score_1(score_1, score_2, player_1, player_2, ball):
+    score_1 += 1
+    hud.clear()
+    hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2,  score_2),
+              align="center", font=("Press Start 2P", 24, "normal"))
+    os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+    ball.goto(0, 0)
+    ball.dx *= -1
+    return score_1
+
+
+def limit_score(score, player):
+    if score == 10:
+        hud.clear()
+        hud.write(" THIS PLAYER WINNER > {} ".format(player),
+                  align="center", font=("Press Start 2P", 24, "normal"))
+        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        hud.write(" click from close game",
+                  align="left", font=("Press Start 2P", 10, "normal"), move=True)
+        screen.exitonclick()
+
+
+def sum_ball(ball):
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
+
+
+def set_collision_wall_ball(ball):
+
+    # collision with the upper wall
+    if ball.ycor() > 290:
+        os.system("afplay bounce.wav&")
+        ball.sety(290)
+        ball.dy *= -1
+
+    # collision with lower wall
+    if ball.ycor() < -290:
+        os.system("afplay bounce.wav&")
+        ball.sety(-290)
+        ball.dy *= -1
+
+
+def set_collision_wall(ball, player_1, player_2, score_1, score_2):
+
+    # collision with left wall
+    if ball.xcor() < -390:
+        score_2 = update_score_2(score_1, score_2, player_1, player_2, ball)
+        limit_score(score_2, player_2)
+
+    # collision with right wall
+    if ball.xcor() > 390:
+        score_1 = update_score_1(score_1, score_2, player_1, player_2, ball)
+        limit_score(score_1, player_1)
+
+
+def set_collision_paddle(ball, paddle_1, paddle_2):
+
+    # collision with the paddle 1
+    if ball.xcor() == paddle_1.xcor() + 20 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50 and \
+            not ball.xcor() < paddle_1.xcor():
+        ball.dx *= -1
+        os.system("afplay bounce.wav&")
+
+    # collision with the paddle 2
+    if ball.xcor() == paddle_2.xcor() - 20 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50 and \
+            not ball.xcor() > paddle_2.xcor():
+        ball.dx *= -1
+        os.system("afplay bounce.wav&")
+
+
 def main():
     """ Main function of the game
                     """
     score_1 = 0
     score_2 = 0
+    player_1 = 'PLAYER 1 '
+    player_2 = 'PLAYER 2 '
     window()
     controls()
     game_hud()
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
-    ball = game_ball()
+    ball_1 = game_ball()
     while True:
         screen.update()
 
         # ball movement
-        ball.setx(ball.xcor() + ball.dx)
-        ball.sety(ball.ycor() + ball.dy)
+        sum_ball(ball_1)
 
-        # collision with the upper wall
-        if ball.ycor() > 290:
-            os.system("afplay bounce.wav&")
-            ball.sety(290)
-            ball.dy *= -1
+        # collision wall
+        set_collision_wall_ball(ball_1)
 
-        # collision with lower wall
-        if ball.ycor() < -290:
-            os.system("afplay bounce.wav&")
-            ball.sety(-290)
-            ball.dy *= -1
+        set_collision_wall(ball_1, player_1, player_2, score_1, score_2)
 
-        # collision with left wall
-        if ball.xcor() < -390:
-            score_2 += 1
-            hud.clear()
-            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-            os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.goto(0, 0)
-            ball.dx *= -1
-
-        # collision with right wall
-        if ball.xcor() > 390:
-            score_1 += 1
-            hud.clear()
-            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-            os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.goto(0, 0)
-            ball.dx *= -1
-
-        # collision with the paddle 1
-        if ball.xcor() < -330 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50:
-            ball.dx *= -1
-            os.system("afplay bounce.wav&")
-
-        # collision with the paddle 2
-        if ball.xcor() > 330 and paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50:
-            ball.dx *= -1
-            os.system("afplay bounce.wav&")
-
+        set_collision_paddle(ball_1, paddle_1, paddle_2)
 
 if __name__ == '__main__':
     main()
