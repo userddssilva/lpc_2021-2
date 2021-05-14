@@ -208,5 +208,6 @@ def main():
 
         set_collision_paddle(ball_1, paddle_1, paddle_2)
 
+
 if __name__ == '__main__':
     main()
