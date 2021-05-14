@@ -29,6 +29,7 @@ def window():
     screen.tracer(0)
 
 
+
 def controls():
     """ Set the game's controls"""
     screen.listen()
@@ -92,7 +93,7 @@ def game_ball():
     """ Create the game's ball"""
     ball = turtle.Turtle()
     ball.speed(0)
-    ball.shape("square")
+    ball.shape("circle")
     ball.color("white")
     ball.penup()
     ball.goto(0, 0)
@@ -102,12 +103,15 @@ def game_ball():
 
 
 def update_score(score_1, score_2, player_1, player_2, ball):
+
+    """Update score from players"""
+
     if ball.xcor() > 390:
         score_1 += 1
         hud.clear()
         hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2, score_2),
                   align="center", font=("Press Start 2P", 24, "normal"))
-        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
         return score_1
@@ -117,20 +121,23 @@ def update_score(score_1, score_2, player_1, player_2, ball):
         hud.clear()
         hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2, score_2),
                   align="center", font=("Press Start 2P", 24, "normal"))
-        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
         return score_2
 
 
 def limit_score(score, player):
+
     if score == 10:
         hud.clear()
         hud.write(" THIS PLAYER WINNER > {} ".format(player),
                   align="center", font=("Press Start 2P", 24, "normal"))
-        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
+
+        hud.clear()
         hud.write(" click from close game",
-                  align="left", font=("Press Start 2P", 10, "normal"), move=True)
+              align="left", font=("Press Start 2P", 15,  "normal"))
         screen.exitonclick()
 
 
