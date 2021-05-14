@@ -1,7 +1,6 @@
 import turtle
 import os
 
-
 """ Code variables"""
 screen = turtle.Screen()
 hud = turtle.Turtle()
@@ -102,26 +101,26 @@ def game_ball():
     return ball
 
 
-def update_score_2(score_1, score_2, player_1, player_2, ball):
-    score_2 += 1
-    hud.clear()
-    hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2,  score_2),
-              align="center", font=("Press Start 2P", 24, "normal"))
-    os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
-    ball.goto(0, 0)
-    ball.dx *= -1
-    return score_2
+def update_score(score_1, score_2, player_1, player_2, ball):
+    if ball.xcor() > 390:
+        score_1 += 1
+        hud.clear()
+        hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2, score_2),
+                  align="center", font=("Press Start 2P", 24, "normal"))
+        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        ball.goto(0, 0)
+        ball.dx *= -1
+        return score_1
 
-
-def update_score_1(score_1, score_2, player_1, player_2, ball):
-    score_1 += 1
-    hud.clear()
-    hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2,  score_2),
-              align="center", font=("Press Start 2P", 24, "normal"))
-    os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
-    ball.goto(0, 0)
-    ball.dx *= -1
-    return score_1
+    if ball.xcor() < -390:
+        score_2 += 1
+        hud.clear()
+        hud.write("{} > {} :  {} >  {}".format(player_1, score_1, player_2, score_2),
+                  align="center", font=("Press Start 2P", 24, "normal"))
+        os.system("afplay 258020__kodack__arcade-bleep-sound.wav&")
+        ball.goto(0, 0)
+        ball.dx *= -1
+        return score_2
 
 
 def limit_score(score, player):
@@ -141,7 +140,6 @@ def sum_ball(ball):
 
 
 def set_collision_wall_ball(ball):
-
     # collision with the upper wall
     if ball.ycor() > 290:
         os.system("afplay bounce.wav&")
@@ -155,21 +153,7 @@ def set_collision_wall_ball(ball):
         ball.dy *= -1
 
 
-def set_collision_wall(ball, player_1, player_2, score_1, score_2):
-
-    # collision with left wall
-    if ball.xcor() < -390:
-        score_2 = update_score_2(score_1, score_2, player_1, player_2, ball)
-        limit_score(score_2, player_2)
-
-    # collision with right wall
-    if ball.xcor() > 390:
-        score_1 = update_score_1(score_1, score_2, player_1, player_2, ball)
-        limit_score(score_1, player_1)
-
-
 def set_collision_paddle(ball, paddle_1, paddle_2):
-
     # collision with the paddle 1
     if ball.xcor() == paddle_1.xcor() + 20 and paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50 and \
             not ball.xcor() < paddle_1.xcor():
@@ -204,7 +188,15 @@ def main():
         # collision wall
         set_collision_wall_ball(ball_1)
 
-        set_collision_wall(ball_1, player_1, player_2, score_1, score_2)
+        # collision with left wall
+        if ball_1.xcor() < -390:
+            score_2 = update_score(score_1, score_2, player_1, player_2, ball_1)
+            limit_score(score_2, player_2)
+
+        # collision with right wall
+        if ball_1.xcor() > 390:
+            score_1 = update_score(score_1, score_2, player_1, player_2, ball_1)
+            limit_score(score_1, player_1)
 
         set_collision_paddle(ball_1, paddle_1, paddle_2)
 
