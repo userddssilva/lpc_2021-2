@@ -2,8 +2,7 @@ import turtle
 import os
 
 
-""" Code variables
-        """
+""" Code variables"""
 screen = turtle.Screen()
 hud = turtle.Turtle()
 paddle_1 = turtle.Turtle()
@@ -11,8 +10,7 @@ paddle_2 = turtle.Turtle()
 
 
 def game_hud():
-    """ Shows the game's display
-        """
+    """ Shows the game's display"""
     hud.speed(0)
     hud.shape("square")
     hud.color("white")
@@ -25,8 +23,7 @@ def game_hud():
 
 
 def window():
-    """ Create the game's window
-                """
+    """ Create the game's window"""
     screen.title("My Pong")
     screen.bgcolor("black")
     screen.setup(800, 600)
@@ -34,8 +31,7 @@ def window():
 
 
 def controls():
-    """ Set the game's controls
-                """
+    """ Set the game's controls"""
     screen.listen()
     screen.onkeypress(paddle_1_up, "w")
     screen.onkeypress(paddle_1_down, "s")
@@ -44,8 +40,7 @@ def controls():
 
 
 def set_paddle(paddle, xcor, ycor):
-    """ Creates the paddles of the game
-        """
+    """ Creates the paddles of the game"""
     paddle.speed(0)
     paddle.shape("square")
     paddle.color("white")
@@ -55,8 +50,7 @@ def set_paddle(paddle, xcor, ycor):
 
 
 def move_up(paddle):
-    """ Move the paddles upwards
-            """
+    """ Move the paddles upwards"""
     y = paddle.ycor()
     if y < 250:
         y += 30
@@ -66,20 +60,17 @@ def move_up(paddle):
 
 
 def paddle_1_up():
-    """ Move the left paddle up
-            """
+    """ Move the left paddle up"""
     move_up(paddle_1)
 
 
 def paddle_2_up():
-    """ Move the right paddle up
-                """
+    """ Move the right paddle up"""
     move_up(paddle_2)
 
 
 def move_down(paddle):
-    """ Move the paddles downwards
-                """
+    """ Move the paddles downwards"""
     y = paddle.ycor()
     if y > -250:
         y += -30
@@ -89,20 +80,17 @@ def move_down(paddle):
 
 
 def paddle_1_down():
-    """ Move the left paddle down
-                """
+    """ Move the left paddle down"""
     move_down(paddle_1)
 
 
 def paddle_2_down():
-    """ Move the left paddle down
-                """
+    """ Move the left paddle down"""
     move_down(paddle_2)
 
 
 def game_ball():
-    """ Create the game's ball
-                """
+    """ Create the game's ball"""
     ball = turtle.Turtle()
     ball.speed(0)
     ball.shape("square")
@@ -196,8 +184,7 @@ def set_collision_paddle(ball, paddle_1, paddle_2):
 
 
 def main():
-    """ Main function of the game
-                    """
+    """ Main function of the game"""
     score_1 = 0
     score_2 = 0
     player_1 = 'PLAYER 1 '
