@@ -1,8 +1,14 @@
-PLAY_BLEEP_SOUND = "aplay bleep_sound.wav&"
-PLAY_BOUNCE_SOUND = "aplay bounce_sound.wav&"
+LINUX = 'Linux'
+WINDOWS = 'Windows'
 
-SCREEN_WIDTH = 900
-SCREEN_WEIGHT = 600
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
-stretch_wid = 5
-stretch_len = 1
+PLAYER_WIDTH = 20
+PLAYER_HEIGHT = 60
+
+CURSOR_SIZE = 20
+
+PLAYER_1 = 'PLAYER 1'
+PLAYER_2 = 'PLAYER 2'
+

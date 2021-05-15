@@ -1,9 +1,13 @@
 import turtle
 import os
 
+from random import randint, choice
+from time import sleep
+
 from constants import *
+from play_sounds import play_sound_bounce, play_sound_bleep
 
-
+""" Code variables"""
 screen = turtle.Screen()
 hud = turtle.Turtle()
 paddle_1 = turtle.Turtle()
@@ -24,14 +28,14 @@ def game_hud():
 
 def set_screen():
     """Set config screen"""
-    screen.title("My Pong")
+    screen.title("Pong with Turtle")
     screen.bgcolor("black")
-    screen.setup(SCREEN_WIDTH, SCREEN_WEIGHT)
-    screen.tracer()
+    screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
+    screen.tracer(0)
 
 
-def listen_keyboard():
-    """This function listen the keys press used in game"""
+def controls():
+    """ Set the game's controls"""
     screen.listen()
     screen.onkeypress(paddle_1_up, "w")
     screen.onkeypress(paddle_1_down, "s")
@@ -44,7 +48,7 @@ def set_paddle(paddle, xcor, ycor):
     paddle.speed(0)
     paddle.shape("square")
     paddle.color("white")
-    paddle.shapesize(stretch_wid, stretch_len)
+    paddle.shapesize(PLAYER_HEIGHT / CURSOR_SIZE,  PLAYER_WIDTH / CURSOR_SIZE)
     paddle.penup()
     paddle.goto(xcor, ycor)
 
@@ -89,81 +93,143 @@ def paddle_2_down():
     move_down(paddle_2)
 
 
-def set_ball():
-    """Create ball will be create a rectangle ball to use on game"""
+def game_ball():
+    """ Create the game's ball"""
     ball.speed(0)
-    ball.shape("square")
+    ball.shape("circle")
     ball.color("white")
     ball.penup()
     ball.goto(0, 0)
-    ball.dx = 1
-    ball.dy = 1
+
+
+def write_hud_score(score_1, score_2):
+    msg = f"{score_1} : {score_2}"
+    font = ("Press Start 2P", 24, "normal")
+    hud.write(msg, align="center", font=font)
+
+
+def update_score(score_1, score_2):
+    """Update score from players"""
+    if ball.xcor() > 390:
+        score_1 += 1
+        hud.clear()
+        write_hud_score(score_1, score_2)
+        play_sound_bleep()
+        reset_ball()
+        return score_1
+
+    if ball.xcor() < -390:
+        score_2 += 1
+        hud.clear()
+        write_hud_score(score_1, score_2)
+        play_sound_bleep()
+        reset_ball()
+        return score_2
+
+
+def limit_score(score, player):
+    """This function define limit score"""
+    if score == 1000000:
+        hud.clear()
+        msg_1 = f"{player} WINNER"
+        msg_2 = "Click to close game"
+        font_1 = ("Press Start 2P", 24, "normal")
+        font_2 = ("Press Start 2P", 15, "normal")
+        hud.write(msg_1, align="center", font=font_1)
+        sleep(3)
+        hud.clear()
+        hud.write(msg_2, align="center", font=font_2)
+        screen.exitonclick()
+
+
+def reset_ball():
+    ball.goto(0, 0)
+    ball.setheading(choice([0, 180]) + randint(-60, 60))
+
+
+def move_ball():
+    ball.forward(0.02)
+
+
+def collision_ball_with_wall(score_1, score_2):
+    # collision with the upper wall
+    if ball.ycor() > 290:
+        ball.setheading(-ball.heading())
+        play_sound_bounce()
+
+    # collision with lower wall
+    if ball.ycor() < -290:
+        ball.setheading(-ball.heading())
+        play_sound_bounce()
+
+    # collision with left wall
+    if ball.xcor() < -390:
+        score_2 = update_score(score_1, score_2)
+        limit_score(score_2, PLAYER_2)
+
+    # collision with right wall
+    if ball.xcor() > 390:
+        score_1 = update_score(score_1, score_2)
+        limit_score(score_1, PLAYER_1)
+
+    return score_1, score_2
+
+
+def set_collision_paddle():
+    # collision with the paddle 1
+    # if ball.xcor() > paddle_1.xcor() - 10:
+    #     if paddle_1.ycor() - 50 < ball.ycor() < paddle_1.ycor() + 50:
+    #         if ball.xcor() < paddle_1.xcor() + 20:
+    #             ball.setheading(-180 - ball.heading())
+    #             play_sound_bounce()
+
+    _distance = paddle_1.distance(ball.pos())
+    if _distance < (PLAYER_WIDTH/2) + 10:
+        print("Distance 1: ", _distance)
+        ball.setheading(180 - ball.heading())
+        print("In range:", paddle_1.ycor())
+        print("Down:", paddle_1.ycor() - (PLAYER_HEIGHT / 2))
+        print("Up:", paddle_1.ycor() + (PLAYER_HEIGHT / 2))
+        print("Ball:", ball.ycor())
+        # if paddle_1.ycor() - (PLAYER_WIDTH / 2) < ball.ycor() < paddle_1.ycor() + (PLAYER_WIDTH / 2):
+        #     print("In range:", paddle_1.ycor())
+        #     print("Down:", paddle_1.ycor() - (PLAYER_WIDTH / 2))
+        #     print("Up:", paddle_1.ycor() + (PLAYER_WIDTH / 2))
+
+    # collision with the paddle 1
+    # if ball.xcor() > paddle_2.xcor() + 100:
+    #     reset_ball()
+    # elif paddle_2.ycor() - 50 < ball.ycor() < paddle_2.ycor() + 50:
+    #     if ball.xcor() > paddle_2.xcor() - 20:
+    #         ball.setheading(180 - ball.heading() + choice([45, -45]))
+    #         play_sound_bounce()
+    _distance = paddle_2.distance(ball.pos())
+    if _distance < (PLAYER_HEIGHT/2) - 10:
+        print("Distance 2: ", _distance)
+        ball.setheading(180 - paddle_1.heading())
 
 
 def main():
     score_1 = 0
     score_2 = 0
     set_screen()
-    listen_keyboard()
+    controls()
     game_hud()
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
-    set_ball()
-
+    game_ball()
+    print(os.listdir('.'))
     while True:
         screen.update()
 
         # ball movement
-        ball.setx(ball.xcor() + ball.dx)
-        ball.sety(ball.ycor() + ball.dy)
+        move_ball()
 
-        # collision with the upper wall
-        if ball.ycor() > 290:
-            os.system(PLAY_BOUNCE_SOUND)
-            ball.sety(290)
-            ball.dy *= -1
+        # collision wall
+        score_1, score_2 = collision_ball_with_wall(score_1, score_2)
 
-        # collision with lower wall
-        if ball.ycor() < -290:
-            os.system(PLAY_BOUNCE_SOUND)
-            ball.sety(-290)
-            ball.dy *= -1
-
-        # collision with left wall
-        if ball.xcor() < -390:
-            score_2 += 1
-            hud.clear()
-            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-            os.system(PLAY_BLEEP_SOUND)
-            ball.goto(0, 0)
-            ball.dx *= -1
-
-        # collision with right wall
-        if ball.xcor() > 390:
-            score_1 += 1
-            hud.clear()
-            hud.write("{} : {}".format(score_1, score_2), align="center", font=("Press Start 2P", 24, "normal"))
-            os.system(PLAY_BLEEP_SOUND)
-            ball.goto(0, 0)
-            ball.dx *= -1
-
-        # collision with the paddle 1
-        if ball.xcor() == paddle_1.xcor()+20 and \
-                paddle_1.ycor()+50 > ball.ycor() > paddle_1.ycor()-50 and \
-                not ball.xcor() < paddle_1.xcor():
-            ball.dx *= -1
-            os.system(PLAY_BOUNCE_SOUND)
-
-        # collision with the paddle 2
-        if ball.xcor() == paddle_2.xcor()-20 and \
-                paddle_2.ycor()+50 > ball.ycor() > paddle_2.ycor()-50 and \
-                not ball.xcor() > paddle_2.xcor():
-            ball.dx *= -1
-            os.system(PLAY_BOUNCE_SOUND)
+        set_collision_paddle()
 
 
 if __name__ == '__main__':
     main()
-
-
-
