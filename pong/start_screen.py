@@ -84,7 +84,7 @@ def level_game():
     """Level game"""
     play_sound_bounce()
     print('level')
-    os.system("python ./choice_level.py&")
+    os.system("python ./choice_level.py")
     screen.bye()
 
 

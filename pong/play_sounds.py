@@ -16,13 +16,15 @@ elif platform.system() == WINDOWS:
     # noinspection PyUnresolvedReferences
     import winsound
 
+
     def play_sound_bleep():
         winsound.PlaySound('.\\sounds\\bleep_sound.wav',
-                            winsound.SND_ASYNC)
+                           winsound.SND_ASYNC)
+
 
     def play_sound_bounce():
         winsound.PlaySound('.\\sounds\\bounce_sound.wav',
-                            winsound.SND_ASYNC)
+                           winsound.SND_ASYNC)
 else:
     def play_sound_bleep():
         # noinspection SpellCheckingInspection

@@ -46,6 +46,7 @@ def setup_level_1():
     level_1.write("Level 1", align="center", font=FONT_SIZE_26)
 
 
+# noinspection SpellCheckingInspection
 def set_level(l):
     global level
     level = l
@@ -72,6 +73,7 @@ def _onclick(x, y):
         os.system("python ./start_screen.py&")
 
 
+# noinspection PyGlobalUndefined
 def choice_level_func():
     """choice fasted ball level"""
     global _screen

@@ -1,14 +1,9 @@
 import turtle
-import os
-import time
-
 from random import randint, choice
 from time import sleep
 
 from constants import *
 from play_sounds import play_sound_bleep, play_sound_bounce
-from choice_level import choice_level_func
-
 
 """ Code variables"""
 screen = turtle.Screen()
@@ -39,13 +34,12 @@ def setup_screen():
     screen.tracer(0)
 
 
-def set_pen(pen):
+def set_pen():
     """ Set the pen"""
     pen.hideturtle()
     pen.penup()
     pen.color('#717D7E')
     pen.pensize(3)
-    return pen
 
 
 def controls():
@@ -198,7 +192,6 @@ def collision_ball_with_wall(score_1, score_2):
         ball.setheading(-ball.heading())
         play_sound_bounce()
 
-
     # collision with lower wall
     if ball.ycor() < -290:
         ball.setheading(-ball.heading())
@@ -218,7 +211,7 @@ def collision_ball_with_wall(score_1, score_2):
 
 
 def set_collision_paddle():
-       # collision with the paddle 1
+    # collision with the paddle 1
     if ball.xcor() > paddle_1.xcor() and \
             abs(ball.xcor() - paddle_1.xcor()) < 15 and \
             abs(ball.ycor() - paddle_1.ycor()) < (PLAYER_HEIGHT/2):
@@ -235,6 +228,7 @@ def set_collision_paddle():
         play_sound_bounce()
 
 
+# noinspection PyGlobalUndefined
 def define_level_game():
     global level
     with open('level', 'r') as fl:
@@ -251,7 +245,7 @@ def main():
     setup_screen()
     controls()
     game_hud()
-    set_pen(pen)
+    set_pen()
     draw_border()
     set_paddle(paddle_1, -350, 0, "#000080")
     set_paddle(paddle_2, 350, 0, "red")
