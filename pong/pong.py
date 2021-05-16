@@ -30,7 +30,7 @@ def game_hud():
 
 def window():
     """ Create the game's window"""
-    screen.title("My Pong")
+    screen.title("PONG - CDD")
     screen.bgcolor('#000000')
     screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
     screen.tracer(0)
@@ -56,7 +56,7 @@ def controls():
 
 def set_paddle(paddle, xcor, ycor):
     """ Creates the paddles of the game"""
-    paddle.speed('fastest')
+    paddle.speed(5)
     paddle.shape("square")
     paddle.color("#000080")
     paddle.shapesize(STRETCH_WID, STRETCH_LEN)
@@ -66,17 +66,17 @@ def set_paddle(paddle, xcor, ycor):
 
 def draw_border():
     """ Creates the border of the game"""
-    border.pensize(3)
-    border.penup()
-    border.setposition(-SCREEN_WIDTH, SCREEN_HEIGHT)
-    border.pendown()
-    border.forward(SCREEN_WIDTH)
-    border.penup()
-    border.sety(-SCREEN_HEIGHT / 2.5)
-    border.pendown()
-    border.backward(SCREEN_WIDTH)
     border.color('white')
-    border.speed('fastest')
+    border.pensize(2)
+    border.penup()
+    border.setposition(-SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    border.pendown()
+    for side in range(2):
+        border.forward(SCREEN_WIDTH)
+        border.penup()
+        border.sety(-SCREEN_HEIGHT / 2)
+        border.pendown()
+        border.backward(SCREEN_WIDTH)
 
 
 def move_up(paddle):
@@ -231,13 +231,15 @@ def main():
     window()
     controls()
     game_hud()
-    set_pen(pen)
     draw_border()
+    set_pen(pen)
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
     game_ball()
     while True:
 
+        # fps
+        time.sleep(1/60)
         # Define pen
         pen.goto(0, -SCREEN_HEIGHT//3)
         pen.pendown()
