@@ -1,84 +1,91 @@
 import os
-import simpleaudio as sa
+import turtle
 
 from turtle import Turtle, Screen
 
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import *
+from play_sounds import play_sound_bounce, play_sound_bleep
 
 
-class TitleGame:
-    def __init__(self):
-        self.title_game = Turtle()
-        self.title_game.speed()
-        self.title_game.penup()
-        self.title_game.clear()
-        self.title_game.color("white")
-        self.title_game.hideturtle()
-        self.font = ("Press Start 2P", 32, "normal")
-
-    def set_text(self, title):
-        self.title_game.write(title, align="center", font=self.font)
-
-    def set_position(self, x=0, y=200):
-        self.title_game.goto(x=x, y=y)
+screen = Screen()
+title_game = Turtle()
+start_button = Turtle()
+quit_button = Turtle()
 
 
-class ButtonOnScreen:
-    def __init__(self):
-        self.button = Turtle()
-        self.button.speed(0)
-        self.button.penup()
-        self.button.clear()
-        self.button.shape("square",)
-        self.button.color("white")
-        self.button.hideturtle()
-        self.font = ("Press Start 2P", 26, "normal")
-
-    def set_text(self, text_button):
-        self.button.write(text_button, align="center", font=self.font)
-
-    def set_position(self, x=0, y=200):
-        self.button.goto(x=x, y=y)
+def setup_screen():
+    screen.title("Start Game")
+    screen.bgcolor("black")
+    screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
-class StartScreen:
-    def __init__(self):
-        self.screen = Screen()
-        self.screen.tracer(0)
-        self.screen.title("Start Game")
-        self.screen.bgcolor("black")
-        self.screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.title = TitleGame()
-        self.start_button = ButtonOnScreen()
-        self.quit_button = ButtonOnScreen()
+def setup_title():
+    text_title = "Pong with game"
+    title_game.speed(3)
+    title_game.hideturtle()
+    title_game.penup()
+    title_game.clear()
+    title_game.goto(0, 170)
+    title_game.color("blue")
+    title_game.write(text_title, align="center", font=FONT_SIZE_32)
 
-    def main_function_screen(self):
-        """Listening screen method is on infinity loop, in that all actions of
-        buttons are calls
-        """
-        self.title.set_position()
-        self.title.set_text("Pong with Turtle")
 
-        self.start_button.set_position(x=0, y=50)
-        self.start_button.set_text("Start")
+def setup_start_button():
+    text_button = "Start"
+    start_button.speed(3)
+    start_button.hideturtle()
+    start_button.clear()
+    start_button.penup()
+    start_button.goto(0, 50)
+    start_button.color("green")
+    start_button.shape("square")
+    start_button.write(text_button, align="center", font=FONT_SIZE_26)
 
-        self.quit_button.set_position(x=0, y=-30)
-        self.quit_button.set_text("Quit")
 
-        # path_sound = os.path.join('sounds', 'synthware_loop_sound.wav')
-        # wave_obj = sa.WaveObject.from_wave_file(path_sound)
-        # play_obj = wave_obj.play()
-        # play_obj.wait_done()
+def setup_quit_button():
+    text_button = "Quit"
+    quit_button.speed(3)
+    quit_button.hideturtle()
+    quit_button.penup()
+    quit_button.clear()
+    quit_button.goto(0, -50)
+    quit_button.color("red")
+    quit_button.shape("square")
+    quit_button.write(text_button, align="center", font=FONT_SIZE_26)
 
-        # play_obj = sa.play_buffer(path_sound, 2, 2, 44100)
 
-        while True:
-            self.screen.update()
+def start_game():
+    play_sound_bleep()
+    print('start')
+    os.system("python ./pong.py&")
+    screen.bye()
+
+
+def quit_game():
+    play_sound_bounce()
+    screen.bye()
+
+
+def _onclick(x, y):
+    if (-36.0 <= x <= 43.0) and (57.0 <= y <= 85.0):
+        start_game()
+    elif (-36.0 <= x <= 43.0) and (-48.0 <= y <= -14.0):
+        quit_game()
+    print((x, y))
+
+
+def handle_loop():
+    turtle.onscreenclick(_onclick)
 
 
 def main():
-    a = StartScreen()
-    a.main_function_screen()
+    setup_screen()
+    setup_title()
+    setup_start_button()
+    setup_quit_button()
+    screen.listen()
+    handle_loop()
+    screen.mainloop()
 
 
 if __name__ == '__main__':

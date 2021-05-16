@@ -180,16 +180,16 @@ def set_collision_paddle():
     if ball.xcor() > paddle_1.xcor() and \
             abs(ball.xcor() - paddle_1.xcor()) < 15 and \
             abs(ball.ycor() - paddle_1.ycor()) < (PLAYER_HEIGHT/2):
-        ball.setheading(180 - paddle_1.heading())
         ball.setheading(choice([-45, -30, -15, 0, 15, 30, 45]))
+        ball.speed(8)
         play_sound_bounce()
 
     # collision with the paddle 2
     elif ball.xcor() < paddle_2.xcor() and \
             abs(ball.xcor() - paddle_2.xcor()) < 15 and \
             abs(ball.ycor() - paddle_2.ycor()) < (PLAYER_HEIGHT/2):
-        ball.setheading(180 - paddle_2.heading())
         ball.setheading(choice([-135, -150, -165, 180, 165, 150, 135]))
+        ball.speed(8)
         play_sound_bounce()
 
 
