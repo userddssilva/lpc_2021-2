@@ -6,6 +6,7 @@ from constants import FONT_SIZE_26, SCREEN_WIDTH, SCREEN_HEIGHT
 
 global level
 
+
 def setup_level_3():
     """Define setup level  3"""
     level_3 = Turtle()
