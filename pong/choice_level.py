@@ -7,6 +7,15 @@ from constants import FONT_SIZE_26, SCREEN_WIDTH, SCREEN_HEIGHT
 global level
 
 
+def write_level():
+    global _hud, _text
+    _hud = turtle.Turtle(visible=False)
+    _text = 'Choose a level:'
+    _hud.goto(-260, 150)
+    _hud.color('#717D7E')
+    _hud.write(_text, align="left", font=FONT_SIZE_26)
+
+
 def setup_level_3():
     """Define setup level  3"""
     level_3 = Turtle()
@@ -41,15 +50,15 @@ def setup_level_1():
     level_1.clear()
     level_1.penup()
     level_1.goto(0, 70)
-    level_1.color("red")
+    level_1.color("white")
     level_1.shape("square")
     level_1.write("Level 1", align="center", font=FONT_SIZE_26)
 
 
 # noinspection SpellCheckingInspection
-def set_level(l):
+def set_level(set_l):
     global level
-    level = l
+    level = set_l
     with open('level', 'w') as fl:
         fl.write(str(level))
 
@@ -80,6 +89,7 @@ def choice_level_func():
     _screen = Screen()
     _screen.bgcolor("black")
     _screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
+    write_level()
     setup_level_1()
     setup_level_2()
     setup_level_3()

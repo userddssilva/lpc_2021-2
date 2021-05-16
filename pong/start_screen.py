@@ -23,19 +23,19 @@ def setup_screen():
 
 def setup_title():
     """Define setup title"""
-    text_title = "Pong with game"
+    text_title = "Pong CDD"
     title_game.speed(3)
     title_game.hideturtle()
     title_game.penup()
     title_game.clear()
     title_game.goto(0, 170)
-    title_game.color("blue")
+    title_game.color("white")
     title_game.write(text_title, align="center", font=FONT_SIZE_32)
 
 
 def setup_start_button():
     """Define setup button start"""
-    text_button = "Start"
+    text_button = "Start Game"
     start_button.speed(3)
     start_button.hideturtle()
     start_button.clear()
