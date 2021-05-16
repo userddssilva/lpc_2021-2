@@ -243,6 +243,7 @@ def main():
         pen.pendown()
         pen.goto(0, SCREEN_HEIGHT//3)
 
+        # Update screen
         screen.update()
 
         # ball movement
