@@ -45,7 +45,7 @@ def controls():
 
 def set_paddle(paddle, xcor, ycor):
     """This function will be create a paddle to use on game"""
-    paddle.speed(0)
+    paddle.speed("fastest")
     paddle.shape("square")
     paddle.color("white")
     paddle.shapesize(PLAYER_HEIGHT / CURSOR_SIZE,  PLAYER_WIDTH / CURSOR_SIZE)
@@ -148,7 +148,7 @@ def reset_ball():
 
 
 def move_ball():
-    ball.forward(0.02)
+    ball.forward(0.05)
 
 
 def collision_ball_with_wall(score_1, score_2):
@@ -177,36 +177,20 @@ def collision_ball_with_wall(score_1, score_2):
 
 def set_collision_paddle():
     # collision with the paddle 1
-    # if ball.xcor() > paddle_1.xcor() - 10:
-    #     if paddle_1.ycor() - 50 < ball.ycor() < paddle_1.ycor() + 50:
-    #         if ball.xcor() < paddle_1.xcor() + 20:
-    #             ball.setheading(-180 - ball.heading())
-    #             play_sound_bounce()
-
-    _distance = paddle_1.distance(ball.pos())
-    if _distance < (PLAYER_WIDTH/2) + 10:
-        print("Distance 1: ", _distance)
-        ball.setheading(180 - ball.heading())
-        print("In range:", paddle_1.ycor())
-        print("Down:", paddle_1.ycor() - (PLAYER_HEIGHT / 2))
-        print("Up:", paddle_1.ycor() + (PLAYER_HEIGHT / 2))
-        print("Ball:", ball.ycor())
-        # if paddle_1.ycor() - (PLAYER_WIDTH / 2) < ball.ycor() < paddle_1.ycor() + (PLAYER_WIDTH / 2):
-        #     print("In range:", paddle_1.ycor())
-        #     print("Down:", paddle_1.ycor() - (PLAYER_WIDTH / 2))
-        #     print("Up:", paddle_1.ycor() + (PLAYER_WIDTH / 2))
-
-    # collision with the paddle 1
-    # if ball.xcor() > paddle_2.xcor() + 100:
-    #     reset_ball()
-    # elif paddle_2.ycor() - 50 < ball.ycor() < paddle_2.ycor() + 50:
-    #     if ball.xcor() > paddle_2.xcor() - 20:
-    #         ball.setheading(180 - ball.heading() + choice([45, -45]))
-    #         play_sound_bounce()
-    _distance = paddle_2.distance(ball.pos())
-    if _distance < (PLAYER_HEIGHT/2) - 10:
-        print("Distance 2: ", _distance)
+    if ball.xcor() > paddle_1.xcor() and \
+            abs(ball.xcor() - paddle_1.xcor()) < 15 and \
+            abs(ball.ycor() - paddle_1.ycor()) < (PLAYER_HEIGHT/2):
         ball.setheading(180 - paddle_1.heading())
+        ball.setheading(choice([-45, -30, -15, 0, 15, 30, 45]))
+        play_sound_bounce()
+
+    # collision with the paddle 2
+    elif ball.xcor() < paddle_2.xcor() and \
+            abs(ball.xcor() - paddle_2.xcor()) < 15 and \
+            abs(ball.ycor() - paddle_2.ycor()) < (PLAYER_HEIGHT/2):
+        ball.setheading(180 - paddle_2.heading())
+        ball.setheading(choice([-135, -150, -165, 180, 165, 150, 135]))
+        play_sound_bounce()
 
 
 def main():
@@ -218,7 +202,6 @@ def main():
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
     game_ball()
-    print(os.listdir('.'))
     while True:
         screen.update()
 
