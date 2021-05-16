@@ -8,7 +8,7 @@ global level
 
 
 def write_level():
-    global _hud, _text
+    """Define write text"""
     _hud = turtle.Turtle(visible=False)
     _text = 'Choose a level:'
     _hud.goto(-260, 150)
