@@ -46,7 +46,7 @@ def set_pen(pen):
 
 
 def controls():
-    """ Set the game's controls"""
+    """Set the game's controls"""
     screen.listen()
     screen.onkeypress(paddle_1_up, "w")
     screen.onkeypress(paddle_1_down, "s")
@@ -80,7 +80,7 @@ def draw_border():
 
 
 def move_up(paddle):
-    """ Move the paddles upwards"""
+    """Move the paddles upwards"""
     y = paddle.ycor()
     if y < 250:
         y += 30
@@ -90,7 +90,7 @@ def move_up(paddle):
 
 
 def paddle_1_up():
-    """ Move the left paddle up"""
+    """Move the left paddle up"""
     move_up(paddle_1)
 
 
@@ -100,7 +100,7 @@ def paddle_2_up():
 
 
 def move_down(paddle):
-    """ Move the paddles downwards"""
+    """Move the paddles downwards"""
     y = paddle.ycor()
     if y > -250:
         y += -30
@@ -110,17 +110,17 @@ def move_down(paddle):
 
 
 def paddle_1_down():
-    """ Move the left paddle down"""
+    """Move the left paddle down"""
     move_down(paddle_1)
 
 
 def paddle_2_down():
-    """ Move the left paddle down"""
+    """Move the left paddle down"""
     move_down(paddle_2)
 
 
 def game_ball():
-    """ Create the game's ball"""
+    """Create the game's ball"""
     ball.speed('fastest')
     ball.shape("circle")
     ball.color("white")
@@ -225,21 +225,19 @@ def set_collision_paddle():
 
 
 def main():
-    """ Main function of the game"""
+    """Main function of the game"""
     score_1 = 0
     score_2 = 0
     window()
     controls()
     game_hud()
-    draw_border()
     set_pen(pen)
+    draw_border()
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
     game_ball()
     while True:
 
-        # fps
-        time.sleep(1/60)
         # Define pen
         pen.goto(0, -SCREEN_HEIGHT//3)
         pen.pendown()
