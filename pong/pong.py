@@ -1,10 +1,13 @@
-import time
 import turtle
 import os
+import time
 
+from random import randint, choice
 from time import sleep
+
 from constants import *
-from random import *
+from play_sounds import play_sound_bleep, play_sound_bounce
+from choice_level import choice_level_func
 
 
 """ Code variables"""
@@ -28,10 +31,10 @@ def game_hud():
     hud.write("0 : 0", align="center", font=("Press Start 2P", 24, "normal"))
 
 
-def window():
+def setup_screen():
     """ Create the game's window"""
     screen.title("PONG - CDD")
-    screen.bgcolor('#000000')
+    screen.bgcolor("#000000")
     screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
     screen.tracer(0)
 
@@ -54,12 +57,13 @@ def controls():
     screen.onkeypress(paddle_2_down, "Down")
 
 
-def set_paddle(paddle, xcor, ycor):
+def set_paddle(paddle, xcor, ycor, color="white"):
     """ Creates the paddles of the game"""
-    paddle.speed(5)
+    paddle.speed(10)
     paddle.shape("square")
-    paddle.color("#000080")
-    paddle.shapesize(STRETCH_WID, STRETCH_LEN)
+    paddle.color(color)
+    paddle.shapesize(PLAYER_HEIGHT / CURSOR_SIZE,  
+                     PLAYER_WIDTH / CURSOR_SIZE)
     paddle.penup()
     paddle.goto(xcor, ycor)
 
@@ -121,7 +125,7 @@ def paddle_2_down():
 
 def game_ball():
     """Create the game's ball"""
-    ball.speed('fastest')
+    ball.speed(10)
     ball.shape("circle")
     ball.color("white")
     ball.penup()
@@ -130,9 +134,14 @@ def game_ball():
     ball.dy = 1
 
 
+def reset_ball():
+    ball.goto(0, 0)
+    ball.setheading(choice([0, 180]) + randint(-60, 60))
+
+
 def write_hud_score(score_1, score_2):
     """Write the score of the players in the hud"""
-    msg = f"{score_1} : {score_2}"
+    msg = f"{score_1}     :     {score_2}"
     font = ("Press Start 2P", 24, "normal")
     hud.write(msg, align="center", font=font)
 
@@ -143,18 +152,16 @@ def update_score(score_1, score_2):
         score_1 += 1
         hud.clear()
         write_hud_score(score_1, score_2)
-        os.system("258020__kodack__arcade-bleep-sound.wav&")
-        ball.goto(0, 0)
-        ball.dx *= -1
+        play_sound_bleep()
+        reset_ball()
         return score_1
 
     if ball.xcor() < -390:
         score_2 += 1
         hud.clear()
         write_hud_score(score_1, score_2)
-        os.system("258020__kodack__arcade-bleep-sound.wav&")
-        ball.goto(0, 0)
-        ball.dx *= -1
+        play_sound_bleep()
+        reset_ball()
         return score_2
 
 
@@ -162,12 +169,12 @@ def limit_score(score, player):
     """Sets the score limit"""
     if score == 10:
         hud.clear()
-        msg_1 = f"{player} WINNER"
+        msg_1 = f"WINNER: {player} "
         msg_2 = "Click to close game"
         font_1 = ("Press Start 2P", 24, "normal")
         font_2 = ("Press Start 2P", 15, "normal")
         hud.write(msg_1, align="center", font=font_1)
-        os.system("258020__kodack__arcade-bleep-sound.wav&")
+        play_sound_bleep()
         sleep(3)
         hud.clear()
         hud.write(msg_2, align="center", font=font_2)
@@ -176,23 +183,26 @@ def limit_score(score, player):
 
 def move_ball():
     """Move the ball"""
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    if level == 1:
+        ball.forward(5)
+    elif level == 2:
+        ball.forward(7)
+    elif level == 3:
+        ball.forward(10)
 
 
 def collision_ball_with_wall(score_1, score_2):
     """Responsible for the ball's collision"""
     # collision with the upper wall
     if ball.ycor() > 290:
-        os.system("afplay bounce.wav&")
-        ball.sety(290)
-        ball.dy *= -1
+        ball.setheading(-ball.heading())
+        play_sound_bounce()
+
 
     # collision with lower wall
     if ball.ycor() < -290:
-        os.system("afplay bounce.wav&")
-        ball.sety(-290)
-        ball.dy *= -1
+        ball.setheading(-ball.heading())
+        play_sound_bounce()
 
     # collision with left wall
     if ball.xcor() < -390:
@@ -208,33 +218,43 @@ def collision_ball_with_wall(score_1, score_2):
 
 
 def set_collision_paddle():
-    """Responsible for the paddle's collision with the ball"""
-    # collision with the paddle 1
-    if ball.xcor() == paddle_1.xcor() + 20 and \
-            paddle_1.ycor() + 50 > ball.ycor() > paddle_1.ycor() - 50 and \
-            not ball.xcor() < paddle_1.xcor():
-        ball.dx *= -1
-        os.system("afplay bounce.wav&")
+       # collision with the paddle 1
+    if ball.xcor() > paddle_1.xcor() and \
+            abs(ball.xcor() - paddle_1.xcor()) < 15 and \
+            abs(ball.ycor() - paddle_1.ycor()) < (PLAYER_HEIGHT/2):
+        ball.setheading(choice([-45, -30, -15, 0, 15, 30, 45]))
+        ball.speed(8)
+        play_sound_bounce()
 
     # collision with the paddle 2
-    if ball.xcor() == paddle_2.xcor() - 20 and \
-            paddle_2.ycor() + 50 > ball.ycor() > paddle_2.ycor() - 50 and \
-            not ball.xcor() > paddle_2.xcor():
-        ball.dx *= -1
-        os.system("afplay bounce.wav&")
+    elif ball.xcor() < paddle_2.xcor() and \
+            abs(ball.xcor() - paddle_2.xcor()) < 15 and \
+            abs(ball.ycor() - paddle_2.ycor()) < (PLAYER_HEIGHT/2):
+        ball.setheading(choice([-135, -150, -165, 180, 165, 150, 135]))
+        ball.speed(8)
+        play_sound_bounce()
+
+
+def define_level_game():
+    global level
+    with open('level', 'r') as fl:
+        level = int(fl.read())
+    print(level)
 
 
 def main():
     """Main function of the game"""
+    define_level_game()
+
     score_1 = 0
     score_2 = 0
-    window()
+    setup_screen()
     controls()
     game_hud()
     set_pen(pen)
     draw_border()
-    set_paddle(paddle_1, -350, 0)
-    set_paddle(paddle_2, 350, 0)
+    set_paddle(paddle_1, -350, 0, "#000080")
+    set_paddle(paddle_2, 350, 0, "red")
     game_ball()
     while True:
 
@@ -253,6 +273,7 @@ def main():
         score_1, score_2 = collision_ball_with_wall(score_1, score_2)
 
         set_collision_paddle()
+        sleep(0.01)
 
 
 if __name__ == '__main__':

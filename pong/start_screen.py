@@ -1,61 +1,124 @@
+import os
+import turtle
+
 from turtle import Turtle, Screen
 
-from constants import SCREEN_WEIGHT, SCREEN_WIDTH
+from constants import *
+from play_sounds import play_sound_bounce, play_sound_bleep
 
 
-class TitleGame:
-    def __init__(self, title_game):
-        self.title_game = Turtle()
-        self.title_game.speed()
-        self.title_game.penup()
-        self.title_game.clear()
-        self.title_game.shape("square")
-        self.title_game.color("white")
-        self.title_game.write(title_game,
-                              align="center",
-                              font=("Press Start 2P", 32, "normal"))
-        self.title_game.setposition(x=0, y=500)
+screen = Screen()
+title_game = Turtle()
+start_button = Turtle()
+level_button = Turtle()
+quit_button = Turtle()    
 
 
-class ButtonOnScreen:
-    def __init__(self, text_button):
-        self.button = Turtle()
-        self.button.speed(0)
-        self.button.penup()
-        self.button.clear()
-        self.button.shape("square",)
-        self.button.color("white")
-        self.button.write(text_button,
-                          align="center",
-                          font=("Press Start 2P", 26, "normal"))
+def setup_screen():
+    """Define setup screen"""
+    screen.title("Start Game")
+    screen.bgcolor("black")
+    screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
-class StartScreen:
-    def __init__(self):
-        self.screen = Screen()
-        self.screen.tracer(0)
-        self.screen.title("Start Game")
-        self.screen.bgcolor("black")
-        self.screen.setup(SCREEN_WIDTH, SCREEN_WEIGHT)
+def setup_title():
+    """Define setup title"""
+    text_title = "Pong with game"
+    title_game.speed(3)
+    title_game.hideturtle()
+    title_game.penup()
+    title_game.clear()
+    title_game.goto(0, 170)
+    title_game.color("blue")
+    title_game.write(text_title, align="center", font=FONT_SIZE_32)
 
-        self.title = TitleGame("Pong with Turtle")
 
-        self.start_button = ButtonOnScreen("Start")
-        self.quit_button = ButtonOnScreen("Quit")
+def setup_start_button():
+    """Define setup button start"""
+    text_button = "Start"
+    start_button.speed(3)
+    start_button.hideturtle()
+    start_button.clear()
+    start_button.penup()
+    start_button.goto(0, 50)
+    start_button.color("green")
+    start_button.shape("square")
+    start_button.write(text_button, align="center", font=FONT_SIZE_26)
 
-    def listening_screen(self):
-        """Listening screen method is on infinity loop, in that all actions of
-        buttons are calls
-        """
-        while True:
-            self.screen.update()
+
+def setup_level_button():
+    """Define setup button level"""
+    text_button = "Level"
+    level_button.speed(3)
+    level_button.hideturtle()
+    level_button.penup()
+    level_button.clear()
+    level_button.goto(0, 0)
+    level_button.color("blue")
+    level_button.shape("square")
+    level_button.write(text_button, align="center", font=FONT_SIZE_26)
+
+
+def setup_quit_button():
+    """Define setup button quit"""
+    text_button = "Quit"
+    quit_button.speed(3)
+    quit_button.hideturtle()
+    quit_button.penup()
+    quit_button.clear()
+    quit_button.goto(0, -50)
+    quit_button.color("red")
+    quit_button.shape("square")
+    quit_button.write(text_button, align="center", font=FONT_SIZE_26)
+
+
+def start_game():
+    """Start game"""
+    play_sound_bounce()
+    print('start')
+    os.system("python ./pong.py&")
+    screen.bye()
+
+
+def level_game():
+    """Level game"""
+    play_sound_bounce()
+    print('level')
+    os.system("python ./choice_level.py&")
+    screen.bye()
+
+
+def quit_game():
+    """Quit game"""
+    play_sound_bleep()
+    screen.bye()
+
+
+def _onclick(x, y):
+    """Select button by position"""
+    if (-36.0 <= x <= 43.0) and (57.0 <= y <= 85.0):
+        start_game()
+    elif (-36.0 <= x <= 43.0) and (-48.0 <= y <= -14.0):
+        quit_game()
+    elif (-36.0 <= x <= 43.0) and (2.0 <= y <= 35.0):
+        level_game()
+    print((x, y))
+
+
+def handle_loop():
+    """Check click on screen"""
+    turtle.onscreenclick(_onclick)
 
 
 def main():
-    a = StartScreen()
-    a.listening_screen()
-
-    # while True:
+    setup_screen()
+    setup_title()
+    setup_start_button()
+    setup_level_button()
+    setup_quit_button()
+    screen.listen()
+    handle_loop()
+    screen.mainloop()
 
 
 if __name__ == '__main__':
