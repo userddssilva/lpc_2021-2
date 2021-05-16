@@ -7,7 +7,7 @@ from constants import *
 from random import *
 
 
-""" Code variables"""
+"""Code variables"""
 screen = turtle.Screen()
 hud = turtle.Turtle()
 pen = turtle.Turtle()
@@ -18,7 +18,7 @@ ball = turtle.Turtle()
 
 
 def game_hud():
-    """ Shows the game's display"""
+    """Shows the game's display"""
     hud.speed(0)
     hud.shape("square")
     hud.color("white")
@@ -29,7 +29,7 @@ def game_hud():
 
 
 def window():
-    """ Create the game's window"""
+    """Create the game's window"""
     screen.title("My Pong")
     screen.bgcolor('#000000')
     screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -37,7 +37,7 @@ def window():
 
 
 def set_pen(pen):
-    """ Set the pen"""
+    """Set the pen"""
     pen.hideturtle()
     pen.penup()
     pen.color('#717D7E')
@@ -46,7 +46,7 @@ def set_pen(pen):
 
 
 def controls():
-    """ Set the game's controls"""
+    """Set the game's controls"""
     screen.listen()
     screen.onkeypress(paddle_1_up, "w")
     screen.onkeypress(paddle_1_down, "s")
@@ -55,7 +55,7 @@ def controls():
 
 
 def set_paddle(paddle, xcor, ycor):
-    """ Creates the paddles of the game"""
+    """Creates the paddles of the game"""
     paddle.speed('fastest')
     paddle.shape("square")
     paddle.color("#000080")
@@ -65,7 +65,7 @@ def set_paddle(paddle, xcor, ycor):
 
 
 def draw_border():
-    """ Creates the border of the game"""
+    """Creates the border of the game"""
     border.pensize(3)
     border.penup()
     border.setposition(-SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -80,7 +80,7 @@ def draw_border():
 
 
 def move_up(paddle):
-    """ Move the paddles upwards"""
+    """Move the paddles upwards"""
     y = paddle.ycor()
     if y < 250:
         y += 30
@@ -90,7 +90,7 @@ def move_up(paddle):
 
 
 def paddle_1_up():
-    """ Move the left paddle up"""
+    """Move the left paddle up"""
     move_up(paddle_1)
 
 
@@ -100,7 +100,7 @@ def paddle_2_up():
 
 
 def move_down(paddle):
-    """ Move the paddles downwards"""
+    """Move the paddles downwards"""
     y = paddle.ycor()
     if y > -250:
         y += -30
@@ -110,17 +110,17 @@ def move_down(paddle):
 
 
 def paddle_1_down():
-    """ Move the left paddle down"""
+    """Move the left paddle down"""
     move_down(paddle_1)
 
 
 def paddle_2_down():
-    """ Move the left paddle down"""
+    """Move the left paddle down"""
     move_down(paddle_2)
 
 
 def game_ball():
-    """ Create the game's ball"""
+    """Create the game's ball"""
     ball.speed('fastest')
     ball.shape("circle")
     ball.color("white")
@@ -225,7 +225,7 @@ def set_collision_paddle():
 
 
 def main():
-    """ Main function of the game"""
+    """Main function of the game"""
     score_1 = 0
     score_2 = 0
     window()
