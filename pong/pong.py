@@ -1,12 +1,17 @@
+import time
 import turtle
 import os
 
 from time import sleep
 from constants import *
+from random import *
+
 
 """ Code variables"""
 screen = turtle.Screen()
 hud = turtle.Turtle()
+pen = turtle.Turtle()
+border = turtle.Turtle(visible=False)
 paddle_1 = turtle.Turtle()
 paddle_2 = turtle.Turtle()
 ball = turtle.Turtle()
@@ -20,15 +25,24 @@ def game_hud():
     hud.penup()
     hud.hideturtle()
     hud.goto(0, 260)
-    hud.write("0:0", align="center", font=("Press Start 2P", 24, "normal"))
+    hud.write("0 : 0", align="center", font=("Press Start 2P", 24, "normal"))
 
 
 def window():
     """ Create the game's window"""
     screen.title("My Pong")
-    screen.bgcolor("black")
+    screen.bgcolor('#000000')
     screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
     screen.tracer(0)
+
+
+def set_pen(pen):
+    """ Set the pen"""
+    pen.hideturtle()
+    pen.penup()
+    pen.color('#717D7E')
+    pen.pensize(3)
+    return pen
 
 
 def controls():
@@ -42,12 +56,27 @@ def controls():
 
 def set_paddle(paddle, xcor, ycor):
     """ Creates the paddles of the game"""
-    paddle.speed(0)
+    paddle.speed('fastest')
     paddle.shape("square")
-    paddle.color("white")
+    paddle.color("#000080")
     paddle.shapesize(STRETCH_WID, STRETCH_LEN)
     paddle.penup()
     paddle.goto(xcor, ycor)
+
+
+def draw_border():
+    """ Creates the border of the game"""
+    border.pensize(3)
+    border.penup()
+    border.setposition(-SCREEN_WIDTH, SCREEN_HEIGHT)
+    border.pendown()
+    border.forward(SCREEN_WIDTH)
+    border.penup()
+    border.sety(-SCREEN_HEIGHT / 2.5)
+    border.pendown()
+    border.backward(SCREEN_WIDTH)
+    border.color('white')
+    border.speed('fastest')
 
 
 def move_up(paddle):
@@ -92,7 +121,7 @@ def paddle_2_down():
 
 def game_ball():
     """ Create the game's ball"""
-    ball.speed(0)
+    ball.speed('fastest')
     ball.shape("circle")
     ball.color("white")
     ball.penup()
@@ -114,7 +143,7 @@ def update_score(score_1, score_2):
         score_1 += 1
         hud.clear()
         write_hud_score(score_1, score_2)
-        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
         return score_1
@@ -123,7 +152,7 @@ def update_score(score_1, score_2):
         score_2 += 1
         hud.clear()
         write_hud_score(score_1, score_2)
-        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
         return score_2
@@ -138,7 +167,7 @@ def limit_score(score, player):
         font_1 = ("Press Start 2P", 24, "normal")
         font_2 = ("Press Start 2P", 15, "normal")
         hud.write(msg_1, align="center", font=font_1)
-        os.system("mp3 258020__kodack__arcade-bleep-sound.wav&")
+        os.system("258020__kodack__arcade-bleep-sound.wav&")
         sleep(3)
         hud.clear()
         hud.write(msg_2, align="center", font=font_2)
@@ -202,10 +231,18 @@ def main():
     window()
     controls()
     game_hud()
+    set_pen(pen)
+    draw_border()
     set_paddle(paddle_1, -350, 0)
     set_paddle(paddle_2, 350, 0)
     game_ball()
     while True:
+
+        # Define pen
+        pen.goto(0, -SCREEN_HEIGHT//3)
+        pen.pendown()
+        pen.goto(0, SCREEN_HEIGHT//3)
+
         screen.update()
 
         # ball movement
