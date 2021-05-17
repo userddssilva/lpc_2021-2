@@ -62,7 +62,7 @@ def set_level(set_l):
     level = set_l
     with open('level', 'w') as fl:
         fl.write(str(level))
-    #_screen.bye()
+    # _screen.bye()
     os.system("python ./start_screen.py&")
 
 
@@ -75,13 +75,13 @@ def _onclick(x, y):
 
     elif (-60.0 <= x <= 99.0) and (3.0 <= y <= 43.0):
         set_level(2)
-        #_screen.bye()
-        #os.system("python ./start_screen.py&")
+        # _screen.bye()
+        # os.system("python ./start_screen.py&")
 
     elif (-60.0 <= x <= 99.0) and (-70 <= y <= -28):
         set_level(3)
-        #_screen.bye()
-        #os.system("python ./start_screen.py&")
+        # _screen.bye()
+        # os.system("python ./start_screen.py&")
 
 
 # noinspection PyGlobalUndefined
@@ -98,6 +98,7 @@ def choice_level_func():
     turtle.onscreenclick(_onclick)
     _screen.mainloop()
     _screen.bye()
+
 
 def main():
     choice_level_func()

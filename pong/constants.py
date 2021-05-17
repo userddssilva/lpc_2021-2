@@ -14,4 +14,3 @@ PLAYER_2 = 'PLAYER 2'
 
 FONT_SIZE_32 = ("Press Start 2P", 32, "normal")
 FONT_SIZE_26 = ("Press Start 2P", 26, "normal")
-
