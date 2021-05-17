@@ -76,16 +76,15 @@ def start_game():
     """Start game"""
     play_sound_bounce()
     print('start')
-    os.system("python ./pong.py&")
     screen.bye()
+    os.system("python ./pong.py")
 
 
 def level_game():
     """Level game"""
     play_sound_bounce()
-    print('level')
-    os.system("python ./choice_level.py")
     screen.bye()
+    os.system("python ./choice_level.py")
 
 
 def quit_game():
